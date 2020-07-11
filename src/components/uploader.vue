@@ -15,7 +15,7 @@
             @change="handleChangeFile"
             ref="input"
             class="ye-uploader__file"
-            multiple
+            :multiple="multiple"
             type="file"
         />
         <div class="ye-uploader__tips">
@@ -125,6 +125,9 @@ export default {
         accept: {
             type: String,
             default: 'image/*'
+        },
+        action: {
+            type: String,
         }
     },
     data() {
@@ -169,6 +172,7 @@ export default {
         },
 
         onSure() {
+            const itemWidth = document.querySelector('.ye-uploader__file-list__item').clientWidth
             for (let [i, item] of this.fileCache.entries()) {
                 const xhr = new XMLHttpRequest()
                 const formData = new FormData();
@@ -177,7 +181,7 @@ export default {
                 const that = this;
                 xhr.upload.onprogress = function (e) {
                     const percent = e.loaded / e.total;
-                    const barWidth = percent * 330 + 'px';
+                    const barWidth = percent * itemWidth + 'px';
                     const currentWidth = getComputedStyle(document.querySelector(`.file-list__item__bar__${ i }`)).width || '0';
 
                     document.querySelector(`.file-list__item__bar__${ i }`).animate({
@@ -201,7 +205,7 @@ export default {
 
 <style scoped>
     .ye-uploader {
-        width: 330px;
+        width: 280px;
     }
 
     .ye-uploader__button {
